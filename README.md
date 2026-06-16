@@ -1,16 +1,19 @@
 # Estoque e Vendas V2
 
-Projeto desenvolvido para estudo de FastAPI, SQLite, SQLAlchemy, PostgreSQL, entre outros.
+Projeto de estudos desenvolvido para acompanhar minha evolução em desenvolvimento backend com Python.
 
-## Tecnologias atuais :
+## Tecnologias já implementadas
 
 - Python
 - FastAPI
 - SQLite
 - Pydantic
 
-## Como executar
+## Tecnologias que serão adicionadas
 
-```bash
-pip install -r requirements.txt
-uvicorn main:app --reload
+- SQLAlchemy
+- PostgreSQL
+- JWT Authentication
+- Alembic
+- Docker
+- Deploy
