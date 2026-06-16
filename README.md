@@ -16,4 +16,8 @@ Projeto de estudos desenvolvido para acompanhar minha evolução em desenvolvime
 - JWT Authentication
 - Alembic
 - Docker
+<<<<<<< HEAD
 - Deploy
+=======
+- Deploy
+>>>>>>> 1ceb8a1455d19ec61290a5886ace0dcce9a54126
