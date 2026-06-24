@@ -14,6 +14,8 @@ import models_orm
 
 app = FastAPI()
 
+database_orm.Base.metadata.create_all(bind=database_orm.engine)
+
 DbSession = Annotated[Session, Depends(database_orm.get_db)]
 
 @app.get("/produtos")
