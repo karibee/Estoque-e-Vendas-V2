@@ -8,11 +8,11 @@ Projeto de estudos desenvolvido para acompanhar minha evolução em desenvolvime
 - FastAPI
 - SQLite
 - Pydantic
+- SQLAlchemy
+- PostgreSQL
 
 ## Tecnologias que serão adicionadas
 
-- SQLAlchemy
-- PostgreSQL
 - JWT Authentication
 - Alembic
 - Docker
