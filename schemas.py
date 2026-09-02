@@ -1,16 +1,16 @@
 from pydantic import BaseModel
 from typing import Optional
 
-class Produto(BaseModel):
+class Product(BaseModel):
     id: int
-    dono_id: Optional[int] = None
-    nome: str
-    preco : float
+    owner_id: Optional[int] = None
+    name: str
+    price : float
 
 class UserCreate(BaseModel):
     id : int
     login : str
-    senha : str
+    password : str
 
 class UserResponse(BaseModel):
     id : int

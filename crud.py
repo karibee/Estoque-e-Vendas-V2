@@ -1,16 +1,16 @@
 from sqlalchemy.orm import Session
-from models import Produto_orm, Usuario_orm
+from models import Product_orm, User_orm
 from typing import Annotated, Optional
 from fastapi import Depends
 from database import get_db
 
 dbSessionCrud = Annotated[Session, Depends(get_db)]
 
-def get_produto_by_id(db: dbSessionCrud, produto_id : int):
-    return db.query(Produto_orm).filter(Produto_orm.id == produto_id).first()
+def get_product_by_id(db: dbSessionCrud, product_id : int):
+    return db.query(Product_orm).filter(Product_orm.id == product_id).first()
 
-def get_produto_by_name(db: dbSessionCrud, produto_name : str):
-    return db.query(Produto_orm).filter(Produto_orm.nome == produto_name).first()
+def get_product_by_name(db: dbSessionCrud, product_name : str):
+    return db.query(Product_orm).filter(Product_orm.name == product_name).first()
 
-def get_produto_by_donoID(db: dbSessionCrud, dono_id : int):
-    return db.query(Usuario_orm).filter(Usuario_orm.id == dono_id).first()
+def get_product_by_ownerID(db: dbSessionCrud, owner_id : int):
+    return db.query(User_orm).filter(User_orm.id == owner_id).first()

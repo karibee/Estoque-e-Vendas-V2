@@ -1,8 +1,8 @@
-# Estoque e Vendas V2
+# Inventory and Sales V2
 
-Projeto de estudos desenvolvido para acompanhar minha evolução em desenvolvimento backend com Python.
+Study project developed to track my progress in backend development with Python.
 
-## Tecnologias já implementadas
+## Technologies already implemented
 
 - Python
 - FastAPI
@@ -11,7 +11,7 @@ Projeto de estudos desenvolvido para acompanhar minha evolução em desenvolvime
 - SQLAlchemy
 - PostgreSQL
 
-## Tecnologias que serão adicionadas
+## Technologies to be added
 
 - JWT Authentication
 - Alembic

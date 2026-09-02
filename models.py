@@ -3,33 +3,33 @@ from sqlalchemy import ForeignKey
 from database import Base
 from datetime import date
 
-class Produto_orm(Base):
-    __tablename__ = "produtos"
+class Product_orm(Base):
+    __tablename__ = "products"
 
     id: Mapped[int] = mapped_column(primary_key=True)
-    dono_id: Mapped[int] = mapped_column(ForeignKey("users.id"), nullable=True)
-    nome: Mapped[str] = mapped_column(nullable=False)
-    preco: Mapped[float] = mapped_column(nullable=False)
+    owner_id: Mapped[int] = mapped_column(ForeignKey("users.id"), nullable=True)
+    name: Mapped[str] = mapped_column(nullable=False)
+    price: Mapped[float] = mapped_column(nullable=False)
 
-    dono: Mapped["Usuario_orm"] = relationship(back_populates="produtos")
+    owner: Mapped["User_orm"] = relationship(back_populates="products")
 
-class Usuario_orm(Base):
+class User_orm(Base):
     __tablename__ = "users"
 
     id: Mapped[int] = mapped_column(primary_key=True)
     login: Mapped[str] = mapped_column(unique=True, nullable=False)
-    senha: Mapped[str] = mapped_column(nullable=False)
+    password: Mapped[str] = mapped_column(nullable=False)
 
-    produtos: Mapped["Produto_orm"] = relationship(back_populates="dono")
-    perfil: Mapped["Perfil_orm"] = relationship(back_populates="dono", uselist=False)
+    products: Mapped["Product_orm"] = relationship(back_populates="owner")
+    profile: Mapped["Profile_orm"] = relationship(back_populates="owner", uselist=False)
 
-class Perfil_orm(Base):
-    __tablename__ = "perfis"
+class Profile_orm(Base):
+    __tablename__ = "profiles"
 
     id: Mapped[int] = mapped_column(primary_key=True)
-    dono_id: Mapped[int] = mapped_column(ForeignKey("users.id"), nullable=False, unique=True)
+    owner_id: Mapped[int] = mapped_column(ForeignKey("users.id"), nullable=False, unique=True)
     cpf: Mapped[int] = mapped_column(unique=True, nullable=False)
-    telefone: Mapped[int] = mapped_column(unique=True, nullable=True)
-    data_nascimento: Mapped[date] = mapped_column(nullable=False)
+    phone: Mapped[int] = mapped_column(unique=True, nullable=True)
+    birth_date: Mapped[date] = mapped_column(nullable=False)
 
-    dono: Mapped["Usuario_orm"] = relationship(back_populates="perfil")
+    owner: Mapped["User_orm"] = relationship(back_populates="profile")
