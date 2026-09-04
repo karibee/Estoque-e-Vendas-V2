@@ -5,7 +5,7 @@ from sqlalchemy.orm import Session
 from database import get_db
 from models import User_orm
 from schemas import UserCreate, UserResponse
-from crud import user_by_id
+from crud import user_by_id, user_by_login
 
 router = APIRouter(prefix="/users", tags=["Users"])
 
@@ -25,15 +25,17 @@ async def get_user(db : dbSession, user_id : int):
 
     raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail='user not found')
 
-@router.post("", response_model=list[UserResponse], status_code=status.HTTP_201_CREATED)
+@router.post("", response_model=UserResponse, status_code=status.HTTP_201_CREATED)
 async def create_user(user : UserCreate, db : dbSession):
-    user_by_id = db.query(User_orm).filter(User_orm.id == user.id).first()
-    user_by_login = db.query(User_orm).filter(User_orm.login == user.login).first()
+    user_from_id = user_by_id(db, user.id)
+    user_from_login = user_by_login(db, user.login)
     
-    if user_by_id is not None or user_by_login is not None:
-        raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail="User ID or NAME already exists.")
+    if user_from_id is not None or user_from_login is not None:
+        raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail="User ID or LOGIN already exists.")
     
     new_user = User_orm(id=user.id, login=user.login, password=user.password)
     db.add(new_user)
     db.commit()
     db.refresh(new_user)
+
+    return new_user
