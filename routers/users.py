@@ -5,6 +5,7 @@ from sqlalchemy.orm import Session
 from database import get_db
 from models import User_orm
 from schemas import UserCreate, UserResponse
+from crud import user_by_id
 
 router = APIRouter(prefix="/users", tags=["Users"])
 
@@ -14,6 +15,15 @@ dbSession = Annotated[Session, Depends(get_db)]
 async def list_users(db : dbSession):
     results = db.query(User_orm).all()
     return results
+
+@router.get("/{user_id}", response_model=UserResponse)
+async def get_user(db : dbSession, user_id : int):
+    user = user_by_id(db, user_id)
+
+    if user is not None:
+        return user
+
+    raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail='user not found')
 
 @router.post("", response_model=list[UserResponse], status_code=status.HTTP_201_CREATED)
 async def create_user(user : UserCreate, db : dbSession):
