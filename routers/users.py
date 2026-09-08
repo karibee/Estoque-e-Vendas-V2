@@ -4,7 +4,7 @@ from sqlalchemy.orm import Session
 
 from database import get_db
 from models import User_orm
-from schemas import UserCreate, UserResponse
+from modules.users.schemas import UserCreate, UserResponse
 from crud import user_by_id, user_by_login
 
 router = APIRouter(prefix="/users", tags=["Users"])
