@@ -14,9 +14,3 @@ def get_product_by_name(db: dbSessionCrud, product_name : str):
 
 def get_product_by_ownerID(db: dbSessionCrud, owner_id : int):
     return db.query(User_orm).filter(User_orm.id == owner_id).first()
-
-def user_by_id(db: dbSessionCrud, user_id: int) -> User_orm | None:
-    return db.query(User_orm).filter(User_orm.id == user_id).first()
-
-def user_by_login(db: dbSessionCrud, user_login: str) -> User_orm | None:
-    return db.query(User_orm).filter(User_orm.login == user_login).first()
