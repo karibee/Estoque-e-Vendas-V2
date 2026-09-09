@@ -13,8 +13,7 @@ dbSession = Annotated[Session, Depends(get_db)]
 
 @router.get("", response_model=list[UserResponse])
 async def list_users(db : dbSession):
-    results = db.query(User_orm).all()
-    return results
+    return repository.list_all(db)
 
 @router.get("/{user_id}", response_model=UserResponse)
 async def get_user(db : dbSession, user_id : int):
