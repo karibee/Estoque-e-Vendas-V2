@@ -10,3 +10,10 @@ def get_by_login(db: Session, user_login: str) -> User_orm | None:
 
 def list_all(db: Session) -> Sequence[User_orm]:
     return db.query(User_orm).all()
+
+def create(db: Session, user: User_orm) -> User_orm:
+    db.add(user)
+    db.commit()
+    db.refresh(user)
+
+    return user

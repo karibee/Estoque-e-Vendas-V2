@@ -33,8 +33,5 @@ async def create_user(user : UserCreate, db : dbSession):
         raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail="User ID or LOGIN already exists.")
     
     new_user = User_orm(id=user.id, login=user.login, password=user.password)
-    db.add(new_user)
-    db.commit()
-    db.refresh(new_user)
 
-    return new_user
+    return repository.create(db, new_user)
