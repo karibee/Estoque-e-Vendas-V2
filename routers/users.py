@@ -3,8 +3,8 @@ from typing import Annotated
 from sqlalchemy.orm import Session
 
 from database import get_db
-from models import User_orm
 from modules.users.schemas import UserCreate, UserResponse
+from modules.users import service
 from modules.users import repository
 
 router = APIRouter(prefix="/users", tags=["Users"])
@@ -26,12 +26,9 @@ async def get_user(db : dbSession, user_id : int):
 
 @router.post("", response_model=UserResponse, status_code=status.HTTP_201_CREATED)
 async def create_user(user : UserCreate, db : dbSession):
-    user_from_id = repository.get_by_id(db, user.id)
-    user_from_login = repository.get_by_login(db, user.login)
+    try:
+        created_user = service.create(db, user)
+        return created_user
     
-    if user_from_id is not None or user_from_login is not None:
-        raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail="User ID or LOGIN already exists.")
-    
-    new_user = User_orm(id=user.id, login=user.login, password=user.password)
-
-    return repository.create(db, new_user)
+    except service.UserConflictError as exc:
+        raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail='User login or ID already exists') from exc
