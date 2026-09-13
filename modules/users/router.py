@@ -17,12 +17,12 @@ async def list_users(db : dbSession):
 
 @router.get("/{user_id}", response_model=UserResponse)
 async def get_user(db : dbSession, user_id : int):
-    user = repository.get_by_id(db, user_id)
-
-    if user is not None:
+    try:
+        user = service.get_user(db, user_id)
         return user
 
-    raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail='user not found')
+    except service.UserNotFoundError as exc:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail='User not found') from exc
 
 @router.post("", response_model=UserResponse, status_code=status.HTTP_201_CREATED)
 async def create_user(user : UserCreate, db : dbSession):

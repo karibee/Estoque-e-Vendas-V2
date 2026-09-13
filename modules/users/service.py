@@ -6,6 +6,9 @@ from modules.users import repository
 class UserConflictError(ValueError):
     """Raised when a user login or ID already exists"""
 
+class UserNotFoundError(ValueError):
+    """Raised when the requested user does not exist."""
+
 def create(db: Session, user: UserCreate) -> User_orm:
     user_from_id = repository.get_by_id(db, user.id)
     user_from_login = repository.get_by_login(db, user.login)
@@ -14,3 +17,11 @@ def create(db: Session, user: UserCreate) -> User_orm:
         raise UserConflictError
     
     return repository.create(db, User_orm(id=user.id, login=user.login, password=user.password))
+
+def get_user(db: Session, user_id: int) -> User_orm:
+    user = repository.get_by_id(db, user_id)
+
+    if user is None:
+        raise UserNotFoundError
+
+    return user
