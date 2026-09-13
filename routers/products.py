@@ -2,6 +2,7 @@ from fastapi import APIRouter, HTTPException, status, Depends
 from typing import Annotated, List
 from sqlalchemy.orm import Session
 import crud
+from modules.products import repository
 from database import get_db
 from models import Product_orm
 from modules.products.schemas import Product
@@ -17,15 +18,15 @@ async def list_products(db: dbSession):
 
 @router.get("/{product_id}")
 async def get_product(product_id: int, db: dbSession):
-    product = crud.get_product_by_id(db, product_id)
+    product = repository.get_by_id(db, product_id)
     if product is not None:
         return product
     raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail='Product not found.')
 
 @router.post("", status_code=status.HTTP_201_CREATED)
 async def insert_product(product: Product, db: dbSession):
-    product_by_id = crud.get_product_by_id(db, product.id)
-    product_by_name = crud.get_product_by_name(db, product.name)
+    product_by_id = repository.get_by_id(db, product.id)
+    product_by_name = repository.get_by_name(db, product.name)
     
     if product_by_id is not None or product_by_name is not None:
         raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail="Product ID or NAME already exists.")
@@ -46,8 +47,8 @@ async def insert_products(products: List[Product], db: dbSession):
     had_errors = False
 
     for product in products:
-        product_by_id = crud.get_product_by_id(db, product.id)
-        product_by_name = crud.get_product_by_name(db, product.name)
+        product_by_id = repository.get_by_id(db, product.id)
+        product_by_name = repository.get_by_name(db, product.name)
         
         if product_by_id is not None or product_by_name is not None:
             product_error = {
@@ -83,7 +84,7 @@ async def insert_products(products: List[Product], db: dbSession):
 
 @router.delete("/{product_id}")
 async def delete_product(product_id: int, db: dbSession):
-    product = crud.get_product_by_id(db, product_id)
+    product = repository.get_by_id(db, product_id)
     if product is not None:
         db.delete(product)
         db.commit()
@@ -95,7 +96,7 @@ async def delete_product(product_id: int, db: dbSession):
 
 @router.put("/{product_id}")
 async def update_product(product_id: int, product: Product, db: dbSession):
-    product_found = crud.get_product_by_id(db, product_id) 
+    product_found = repository.get_by_id(db, product_id)
     if product_found is not None:
         product_found.name = product.name
         product_found.price = product.price
@@ -109,7 +110,7 @@ async def update_product(product_id: int, product: Product, db: dbSession):
 
 @router.put("/{product_id}")
 async def update_product_owner(product_id: int, put_owner_id: int | None, db: dbSession):
-    product_found = crud.get_product_by_id(db, product_id)
+    product_found = repository.get_by_id(db, product_id)
     if product_found is None:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail='Product not found.')
     
