@@ -1,4 +1,5 @@
 from modules.users.schemas import UserCreate
+from collections.abc import Sequence
 from models import User_orm
 from sqlalchemy.orm import Session
 from modules.users import repository
@@ -25,3 +26,6 @@ def get_user(db: Session, user_id: int) -> User_orm:
         raise UserNotFoundError
 
     return user
+
+def list_users(db : Session) -> Sequence[User_orm]:
+    return repository.list_all(db)

@@ -5,7 +5,6 @@ from sqlalchemy.orm import Session
 from database import get_db
 from modules.users.schemas import UserCreate, UserResponse
 from modules.users import service
-from modules.users import repository
 
 router = APIRouter(prefix="/users", tags=["Users"])
 
@@ -13,7 +12,7 @@ dbSession = Annotated[Session, Depends(get_db)]
 
 @router.get("", response_model=list[UserResponse])
 async def list_users(db : dbSession):
-    return repository.list_all(db)
+    return service.list_users(db)
 
 @router.get("/{user_id}", response_model=UserResponse)
 async def get_user(db : dbSession, user_id : int):
