@@ -10,3 +10,10 @@ def get_by_name(db: Session, product_name : str) -> Product_orm | None:
 
 def list_all(db: Session) -> Sequence[Product_orm]:
     return db.query(Product_orm).all()
+
+def create(db: Session, new_product: Product_orm) -> Product_orm:
+    db.add(new_product)
+    db.commit()
+    db.refresh(new_product)
+
+    return new_product

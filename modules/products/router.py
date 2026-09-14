@@ -26,21 +26,15 @@ async def get_product(product_id: int, db: dbSession):
 
 @router.post("", status_code=status.HTTP_201_CREATED)
 async def insert_product(product: Product, db: dbSession):
-    product_by_id = product_repository.get_by_id(db, product.id)
-    product_by_name = product_repository.get_by_name(db, product.name)
-    
-    if product_by_id is not None or product_by_name is not None:
-        raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail="Product ID or NAME already exists.")
-    
-    new_product = Product_orm(id=product.id, owner_id=product.owner_id, name=product.name, price=product.price)
-    db.add(new_product)
-    db.commit()
-    db.refresh(new_product)
-    
-    return {
-        "message": "Product created successfully",
-        "product": new_product,
-    }
+    try:
+        new_product = service.create(db, product)
+        return {
+            "message": "Product created successfully",
+            "product": new_product
+        }
+
+    except service.ProductConflictError as exc:
+        raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail='Product ID or name already exists.') from exc
 
 @router.post("/batch", status_code=status.HTTP_201_CREATED)
 async def insert_products(products: List[Product], db: dbSession):
