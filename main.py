@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 import database
-from routers import products
 from modules.users import router as users
+from modules.products import router as products
 
 app = FastAPI()
 
