@@ -14,8 +14,7 @@ dbSession = Annotated[Session, Depends(get_db)]
 
 @router.get("")
 async def list_products(db: dbSession):
-    results = db.query(Product_orm).all()
-    return results
+    return service.list_products(db)
 
 @router.get("/{product_id}")
 async def get_product(product_id: int, db: dbSession):
