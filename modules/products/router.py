@@ -6,6 +6,7 @@ from modules.products import repository as product_repository
 from database import get_db
 from models import Product_orm
 from modules.products.schemas import Product
+from modules.products import service
 
 router = APIRouter(prefix="/products", tags=["Products"])
 
@@ -18,10 +19,11 @@ async def list_products(db: dbSession):
 
 @router.get("/{product_id}")
 async def get_product(product_id: int, db: dbSession):
-    product = product_repository.get_by_id(db, product_id)
-    if product is not None:
-        return product
-    raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail='Product not found.')
+    try:
+        return service.get_by_id(db, product_id)
+
+    except service.ProductNotFoundError as exc:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail='Product not found.') from exc
 
 @router.post("", status_code=status.HTTP_201_CREATED)
 async def insert_product(product: Product, db: dbSession):
